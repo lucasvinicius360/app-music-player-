@@ -10,6 +10,6 @@ class PlayerModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
-    ChildRoute(Modular.initialRoute, child: (_, args) => PlayerPage(url: args.data,)),
+    // ChildRoute(Modular.initialRoute, child: (_, args) => PlayerPage(url: args.data,)),
   ];
 }
