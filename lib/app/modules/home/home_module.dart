@@ -20,11 +20,5 @@ class HomeModule extends Module {
     // Remova uma das rotas '/Player' para evitar duplicatas
   ];
 
-  // @override
-  // List<Router> get routers => [
-  //   Router('/Player', module: PlayerModule()),
-  // ];
-
-  // // ignore: recursive_getters
-  // static Inject get to => Inject<HomeModule>.of();
+  
 }
