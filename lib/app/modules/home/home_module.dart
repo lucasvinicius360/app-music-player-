@@ -15,7 +15,10 @@ class HomeModule extends Module {
   @override
   final List<ModularRoute> routes = [
     ChildRoute(Modular.initialRoute, child: (_, args) => HomePage()),
-    ChildRoute('/Player', child: (_, args) => PlayerPage(url: args.data,)),
+    
+    ChildRoute('/Player', child: (_, args) => PlayerPage(url: args.data)),
+    // Remova uma das rotas '/Player' para evitar duplicatas
   ];
 
+  
 }
