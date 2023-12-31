@@ -1,17 +1,26 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobx/mobx.dart';
+import 'package:music_player/app/models/music_model.dart';
 import 'package:music_player/app/modules/player/player_store.dart';
 import 'package:flutter/material.dart';
 
 class PlayerPage extends StatefulWidget {
-  final String url;
-  PlayerPage({Key? key, required this.url}) : super(key: key);
+  final MusicaModel bands;
+
+  PlayerPage({Key? key, required this.bands}) : super(key: key);
   @override
   PlayerPageState createState() => PlayerPageState();
 }
 
 class PlayerPageState extends State<PlayerPage> {
-  // final PlayerStore store = Modular.get();
+  final PlayerStore store = new PlayerStore();
+
+  @override
+  void initState() {
+    super.initState();
+    // store.PlayMusic();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +28,7 @@ class PlayerPageState extends State<PlayerPage> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         centerTitle: true,
-        title: Text(widget.url),
+        title: Text(widget.bands.name_band),
       ),
       backgroundColor: Colors.black,
       body: Column(
@@ -41,7 +50,7 @@ class PlayerPageState extends State<PlayerPage> {
         height: 350,
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage(widget.url), fit: BoxFit.cover),
+                image: NetworkImage(widget.bands.url_image), fit: BoxFit.cover),
             borderRadius: BorderRadius.circular(2),
             boxShadow: [
               BoxShadow(color: Colors.grey.shade800, blurRadius: 10)
@@ -55,13 +64,13 @@ class PlayerPageState extends State<PlayerPage> {
       children: <Widget>[
         Container(
           child: Text(
-            'In The End',
+            widget.bands.name_music,
             style: GoogleFonts.ptSansCaption(fontSize: 25),
           ),
         ),
         Container(
           child: Text(
-            'Linkin Park',
+            widget.bands.name_band,
             style: GoogleFonts.ptSansCaption(fontSize: 15),
           ),
         ),
@@ -86,7 +95,9 @@ class PlayerPageState extends State<PlayerPage> {
           child: Row(
             children: <Widget>[
               Text('0:15'),
-              Expanded(child: Container(),),
+              Expanded(
+                child: Container(),
+              ),
               Text('03:15')
             ],
           ),
@@ -96,41 +107,56 @@ class PlayerPageState extends State<PlayerPage> {
   }
 
   buildButtons() {
-  return Container(
-    padding: EdgeInsets.all(20),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Adicione esta linha para distribuir os botões igualmente no espaço disponível
-      children: <Widget>[
-        SizedBox(
-          width: 86, // Ajuste o valor conforme necessário
-          child: ElevatedButton(
-            child: Icon(Icons.fast_rewind, size: 30, color: Colors.limeAccent.shade700,),
-            onPressed: () {
-              print('Icons.fast_rewind');
-            },
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment
+            .spaceEvenly, // Adicione esta linha para distribuir os botões igualmente no espaço disponível
+        children: <Widget>[
+          SizedBox(
+            width: 86, // Ajuste o valor conforme necessário
+            child: ElevatedButton(
+              child: Icon(
+                Icons.fast_rewind,
+                size: 30,
+                color: Colors.limeAccent.shade700,
+              ),
+              onPressed: () {
+                print('Icons.fast_rewind');
+              },
+            ),
           ),
-        ),
-        SizedBox(
-          width: 86, // Ajuste o valor conforme necessário
-          child: ElevatedButton(
-            child: Icon(Icons.play_circle_outlined, size: 30, color: Colors.limeAccent.shade700,),
-            onPressed: () {
-              print('play_circle_outlined');
-            },
+          SizedBox(
+            width: 86, // Ajuste o valor conforme necessário
+            child: ElevatedButton(
+              child: Icon(
+                store.musicPlaying
+                    ? Icons.pause_circle_outlined
+                    : Icons.play_circle_outlined,
+                size: 30,
+                color: Colors.limeAccent.shade700,
+              ),
+              onPressed: () {
+                store.PlayMusic(widget.bands);
+                print('play_circle_outlined');
+              },
+            ),
           ),
-        ),
-        SizedBox(
-          width: 86, // Ajuste o valor conforme necessário
-          child: ElevatedButton(
-            child: Icon(Icons.fast_forward, size: 30, color: Colors.limeAccent.shade700,),
-            onPressed: () {
-              print('Icons.fast_forward');
-            },
+          SizedBox(
+            width: 86, // Ajuste o valor conforme necessário
+            child: ElevatedButton(
+              child: Icon(
+                Icons.fast_forward,
+                size: 30,
+                color: Colors.limeAccent.shade700,
+              ),
+              onPressed: () {
+                print('Icons.fast_forward');
+              },
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
-
+        ],
+      ),
+    );
+  }
 }

@@ -4,7 +4,7 @@ part 'music_model.g.dart';
 
 @JsonSerializable()
 class MusicaModel {
-  @JsonKey(name: '_id')
+  @JsonKey(name: 'id')
   String id;
   String name_band;
   String url_image;

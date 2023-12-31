@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -17,7 +19,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
   @override
   void initState() {
     super.initState();
-    store.findAll();
+    store.find();
   }
 
   @override
@@ -32,17 +34,18 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
       backgroundColor: Colors.black,
 
       body: FutureBuilder<List<MusicaModel>>(
-        builder: (context, constructor) {
-          future: store.musicList;
-          switch (constructor.data) {
+        future: store.test,
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
             case ConnectionState.waiting:
               return Center(
                 child: CircularProgressIndicator(),
               );
               break;
+            // ignore: constant_pattern_never_matches_value_type
             case ConnectionState.done:
-              if (constructor.hasData) {
-                return buildList(constructor.data);
+              if (snapshot.hasData) {
+                return buildList(snapshot.data);
               } else {
                 return Container();
               }
@@ -51,7 +54,6 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               return Container();
           }
         },
-        future: null,
       ),
 
       // floatingActionButton: FloatingActionButton(
@@ -65,15 +67,19 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
 
   ListView buildList(List<MusicaModel>? data) {
     return ListView.builder(
-      itemCount: 10,
+      itemCount: data?.length,
       itemBuilder: (_, int index) {
+        var band = data?[index];
+
         return ListTile(
           onTap: () => Modular.to
-              .pushNamed('/Player', arguments: 'assets/images/Linkinpark.jpg'),
-          leading: Image.asset('assets/images/Linkinpark.jpg'),
-          title: Text('Live in texas'),
-          subtitle: Text('Linkin Park'),
-          contentPadding: EdgeInsets.all(15),
+              .pushNamed('/Player', arguments: band),
+          leading: Container(
+            width: 200,
+            child: Image.network(band!.url_image,fit: BoxFit.contain,)),
+          title: Text(band.name_music),
+          subtitle: Text(band.name_band),
+          contentPadding: EdgeInsets.all(19),
         );
       },
     );

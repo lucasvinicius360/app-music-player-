@@ -7,7 +7,7 @@ part of 'music_model.dart';
 // **************************************************************************
 
 MusicaModel _$MusicaModelFromJson(Map<String, dynamic> json) => MusicaModel(
-      id: json['_id'] as String,
+      id: json['id'] as String,
       name_band: json['name_band'] as String,
       url_image: json['url_image'] as String,
       url_musica: json['url_musica'] as String,
@@ -17,7 +17,7 @@ MusicaModel _$MusicaModelFromJson(Map<String, dynamic> json) => MusicaModel(
 
 Map<String, dynamic> _$MusicaModelToJson(MusicaModel instance) =>
     <String, dynamic>{
-      '_id': instance.id,
+      'id': instance.id,
       'name_band': instance.name_band,
       'url_image': instance.url_image,
       'url_musica': instance.url_musica,

@@ -13,24 +13,34 @@ abstract class HomeStoreBase with Store {
   final MusicRepository musicRepository = MusicRepository();
 
   @observable
+  ObservableFuture<List<MusicaModel>> test;
+
+  // Construtor
+  HomeStoreBase()
+      : test = ObservableFuture<List<MusicaModel>>(Future.value([]));
+
+  @observable
   int counter = 0;
 
   @observable
   ObservableList<MusicaModel> musicList = ObservableList<MusicaModel>();
 
-  // @observable
-  // late ObservableFuture<List<MusicaModel>> test;
+  ObservableList<MusicaModel> musics = ObservableList.of([]);
 
+  @action
+  void find() {
+    test = ObservableFuture(musicRepository.findMusics());
+  }
 
+  @action
+  Future<List<MusicaModel>> findAll() async {
+    List<MusicaModel> musics = await musicRepository.findMusics();
+    return musics;
+  }
 
   @action
   Future<void> increment() async {
     counter = counter + 1;
-  }
-
-  @action
-  Future <void> findAll() async {
-    List<MusicaModel> musics = await musicRepository.findMusics();
   }
 
   // Adicione um método para buscar músicas
