@@ -43,6 +43,12 @@ dependencies:
   dio: ^5.4.0
   audioplayers: ^5.2.1
   json_annotation: ^4.8.1
+  flutter_seekbar: ^1.0.1
+  circular_seek_bar: ^1.1.1
+  flutter_advanced_seekbar: ^0.0.2
+  squiggly_slider: ^1.0.3
+  flutter_neumorphic_null_safety: ^3.2.4
+  
   
 
 dev_dependencies:

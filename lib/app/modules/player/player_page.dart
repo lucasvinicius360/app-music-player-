@@ -1,4 +1,10 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:circular_seek_bar/circular_seek_bar.dart';
+import 'package:flutter_advanced_seekbar/flutter_advanced_seekbar.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_seekbar/seekbar/seekbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobx/mobx.dart';
 import 'package:music_player/app/models/music_model.dart';
@@ -20,6 +26,9 @@ class PlayerPageState extends State<PlayerPage> {
   void initState() {
     super.initState();
     // store.PlayMusic();
+    store.audioPlayer.onPositionChanged
+        .listen((d) => store.changeTimeToMusic(d));
+    print(store.progressDuration);
   }
 
   @override
@@ -31,14 +40,16 @@ class PlayerPageState extends State<PlayerPage> {
         title: Text(widget.bands.name_band),
       ),
       backgroundColor: Colors.black,
-      body: Column(
-        children: <Widget>[
-          buildImageHeader(),
-          builNameMusic(),
-          buildProgressBar(),
-          buildButtons(),
-        ],
-      ),
+      body: Observer(builder: (_) {
+        return Column(
+          children: <Widget>[
+            buildImageHeader(),
+            builNameMusic(),
+            buildProgressBar(),
+            buildButtons(),
+          ],
+        );
+      }),
     );
   }
 
@@ -79,31 +90,60 @@ class PlayerPageState extends State<PlayerPage> {
   }
 
   buildProgressBar() {
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.only(left: 35, right: 35, top: 30),
-          child: LinearProgressIndicator(
-            backgroundColor: Colors.grey.shade500,
-            valueColor:
-                AlwaysStoppedAnimation<Color>(Colors.limeAccent.shade700),
-            value: 0.5,
+    String state1 = "";
+    int progress1 = store.progressDuration.toInt();
+    return Observer(builder: (_) {
+      return Column(
+        children: <Widget>[
+          Container(
+            // ignore: prefer_const_constructors
+            padding: EdgeInsets.only(left: 35, right: 35, top: 30),
+            // ignore: prefer_const_constructors
+            child: Observer(builder: (_) {
+              print('${store.progressDuration} <<======');
+              return AdvancedSeekBar(
+                Color(0xffeeeff3),
+                10,
+                Colors.blue,
+                fillProgress: true,
+                seekBarStarted: () {
+                  setState(() {
+                    state1 = "starting";
+                  });
+                },
+                seekBarProgress: (v) {
+                  setState(() {
+                    state1 = " seeking";
+                    progress1 = store.progressDuration.toInt();
+                  });
+                },
+                seekBarFinished: (v) {
+                  setState(() {
+                    state1 = " finished";
+                    progress1 = store.progressDuration.toInt();
+                  });
+                },
+              );
+            }),
           ),
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 35, right: 35, top: 6),
-          child: Row(
-            children: <Widget>[
-              Text('0:15'),
-              Expanded(
-                child: Container(),
-              ),
-              Text('03:15')
-            ],
-          ),
-        )
-      ],
-    );
+          Container(
+            padding: EdgeInsets.only(left: 35, right: 35, top: 6),
+            child: Observer(builder: (_) {
+              // debugPrint(store.timeInTime);
+              return Row(
+                children: <Widget>[
+                  Text(store.timeInTime),
+                  Expanded(
+                    child: Container(),
+                  ),
+                  Text(store.totalTime)
+                ],
+              );
+            }),
+          )
+        ],
+      );
+    });
   }
 
   buildButtons() {
@@ -117,9 +157,10 @@ class PlayerPageState extends State<PlayerPage> {
             width: 86, // Ajuste o valor conforme necessário
             child: ElevatedButton(
               child: Icon(
-                Icons.fast_rewind,
+                Icons.skip_previous,
                 size: 30,
-                color: Colors.limeAccent.shade700,
+                // ignore: prefer_const_constructors
+                color: Color.fromARGB(255, 33, 243, 145),
               ),
               onPressed: () {
                 print('Icons.fast_rewind');
@@ -130,15 +171,13 @@ class PlayerPageState extends State<PlayerPage> {
             width: 86, // Ajuste o valor conforme necessário
             child: ElevatedButton(
               child: Icon(
-                store.musicPlaying
-                    ? Icons.pause_circle_outlined
-                    : Icons.play_circle_outlined,
+                _buildIcon(),
+                // store.musicPlaying ? Icons.pause_circle_outlined : Icons.play_circle_outlined,
                 size: 30,
-                color: Colors.limeAccent.shade700,
+                color: Color.fromARGB(255, 87, 181, 63),
               ),
               onPressed: () {
                 store.PlayMusic(widget.bands);
-                print('play_circle_outlined');
               },
             ),
           ),
@@ -146,9 +185,9 @@ class PlayerPageState extends State<PlayerPage> {
             width: 86, // Ajuste o valor conforme necessário
             child: ElevatedButton(
               child: Icon(
-                Icons.fast_forward,
+                Icons.skip_next,
                 size: 30,
-                color: Colors.limeAccent.shade700,
+                color: Color.fromARGB(255, 43, 252, 1),
               ),
               onPressed: () {
                 print('Icons.fast_forward');
@@ -158,5 +197,13 @@ class PlayerPageState extends State<PlayerPage> {
         ],
       ),
     );
+  }
+
+  IconData? _buildIcon() {
+    if (store.musicPlaying) {
+      return Icons.pause_circle_outlined;
+    } else {
+      return Icons.play_circle_outlined;
+    }
   }
 }
