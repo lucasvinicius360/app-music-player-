@@ -16,6 +16,13 @@ mixin _$PlayerStore on PlayerStoreBase, Store {
       (_$totalTimeComputed ??= Computed<String>(() => super.totalTime,
               name: 'PlayerStoreBase.totalTime'))
           .value;
+  Computed<String>? _$timeInTimeComputed;
+
+  @override
+  String get timeInTime =>
+      (_$timeInTimeComputed ??= Computed<String>(() => super.timeInTime,
+              name: 'PlayerStoreBase.timeInTime'))
+          .value;
   Computed<Future<String>>? _$timeProgressComputed;
 
   @override
@@ -153,6 +160,7 @@ musicPlaying: ${musicPlaying},
 audioDuration: ${audioDuration},
 timeToMusic: ${timeToMusic},
 totalTime: ${totalTime},
+timeInTime: ${timeInTime},
 timeProgress: ${timeProgress},
 progressDuration: ${progressDuration}
     ''';

@@ -90,8 +90,8 @@ class PlayerPageState extends State<PlayerPage> {
   }
 
   buildProgressBar() {
-    String state1 = "";
-    int progress1 = store.progressDuration.toInt();
+    
+    
     return Observer(builder: (_) {
       return Column(
         children: <Widget>[
@@ -101,29 +101,25 @@ class PlayerPageState extends State<PlayerPage> {
             // ignore: prefer_const_constructors
             child: Observer(builder: (_) {
               print('${store.progressDuration} <<======');
-              return AdvancedSeekBar(
-                Color(0xffeeeff3),
-                10,
-                Colors.blue,
-                fillProgress: true,
-                seekBarStarted: () {
-                  setState(() {
-                    state1 = "starting";
-                  });
-                },
-                seekBarProgress: (v) {
-                  setState(() {
-                    state1 = " seeking";
-                    progress1 = store.progressDuration.toInt();
-                  });
-                },
-                seekBarFinished: (v) {
-                  setState(() {
-                    state1 = " finished";
-                    progress1 = store.progressDuration.toInt();
-                  });
-                },
-              );
+              return Observer(builder: (_) {
+                return CircularSeekBar(
+                  width: double.infinity,
+                  height: 110,
+                  progress: store.progressDuration,
+                  barWidth: 8,
+                  startAngle: 90,
+                  sweepAngle: 180,
+                  strokeCap: StrokeCap.round,
+                  progressGradientColors: const [
+                    Color.fromARGB(255, 33, 243, 145),
+                    Color.fromARGB(255, 87, 181, 63),
+                    Color.fromARGB(255, 43, 252, 1)
+                  ],
+                  dashWidth: 50,
+                  dashGap: 15,
+                  animation: true,
+                );
+              });
             }),
           ),
           Container(
