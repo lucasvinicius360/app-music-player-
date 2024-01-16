@@ -29,8 +29,8 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
         itemCount: 10,
         itemBuilder: (_, int index) {
           return ListTile(
-            onTap: () => Modular.to.pushNamed('/Player', arguments: 'assets/images/Linkinpark.jpg'),
-            leading: Image.asset('assets/images/Linkinpark.jpg'),
+            onTap: () => Modular.to.pushNamed('/Player', arguments: 'assets/images/img2.jpg'),
+            leading: Image.asset('assets/images/img2.jpg'),
             title: Text('Live in texas'),
             subtitle: Text('Linkin Park'),
             contentPadding: EdgeInsets.all(15),
