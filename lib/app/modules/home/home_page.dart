@@ -25,7 +25,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
 
       backgroundColor: Colors.black,
 
-      body: ListView.builder(
+      body: ListView.builder(        
         itemCount: 10,
         itemBuilder: (_, int index) {
           return ListTile(
@@ -44,6 +44,8 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
       //   },
       //   child: Icon(Icons.add),
       // ),
+
+      
     );
   }
 }
