@@ -19,7 +19,14 @@ class PlayerPageState extends State<PlayerPage> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         centerTitle: true,
-        title: Text(widget.url),
+        title: Text(
+          widget.url,
+          style: GoogleFonts.orbitron(
+            color: Colors.white,
+            fontSize: 17,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ),
       backgroundColor: Colors.black,
       body: Column(
@@ -56,13 +63,21 @@ class PlayerPageState extends State<PlayerPage> {
         Container(
           child: Text(
             'In The End',
-            style: GoogleFonts.ptSansCaption(fontSize: 25),
+            style: GoogleFonts.orbitron(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
         Container(
           child: Text(
             'Linkin Park',
-            style: GoogleFonts.ptSansCaption(fontSize: 15),
+            style: GoogleFonts.orbitron(
+              color: Colors.white,
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
       ],
@@ -85,9 +100,25 @@ class PlayerPageState extends State<PlayerPage> {
           padding: EdgeInsets.only(left: 35, right: 35, top: 6),
           child: Row(
             children: <Widget>[
-              Text('0:15'),
-              Expanded(child: Container(),),
-              Text('03:15')
+              Text(
+                '0:15',
+                style: GoogleFonts.orbitron(
+                  color: Colors.white,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              Expanded(
+                child: Container(),
+              ),
+              Text(
+                '03:15',
+                style: GoogleFonts.orbitron(
+                  color: Colors.white,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w500,
+                ),
+              )
             ],
           ),
         )
@@ -96,41 +127,53 @@ class PlayerPageState extends State<PlayerPage> {
   }
 
   buildButtons() {
-  return Container(
-    padding: EdgeInsets.all(20),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly, // Adicione esta linha para distribuir os botões igualmente no espaço disponível
-      children: <Widget>[
-        SizedBox(
-          width: 86, // Ajuste o valor conforme necessário
-          child: ElevatedButton(
-            child: Icon(Icons.fast_rewind, size: 30, color: Colors.limeAccent.shade700,),
-            onPressed: () {
-              print('Icons.fast_rewind');
-            },
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment
+            .spaceEvenly, // Adicione esta linha para distribuir os botões igualmente no espaço disponível
+        children: <Widget>[
+          SizedBox(
+            width: 86, // Ajuste o valor conforme necessário
+            child: ElevatedButton(
+              child: Icon(
+                Icons.fast_rewind,
+                size: 30,
+                color: Colors.limeAccent.shade700,
+              ),
+              onPressed: () {
+                print('Icons.fast_rewind');
+              },
+            ),
           ),
-        ),
-        SizedBox(
-          width: 86, // Ajuste o valor conforme necessário
-          child: ElevatedButton(
-            child: Icon(Icons.play_circle_outlined, size: 30, color: Colors.limeAccent.shade700,),
-            onPressed: () {
-              print('play_circle_outlined');
-            },
+          SizedBox(
+            width: 86, // Ajuste o valor conforme necessário
+            child: ElevatedButton(
+              child: Icon(
+                Icons.play_circle_outlined,
+                size: 30,
+                color: Colors.limeAccent.shade700,
+              ),
+              onPressed: () {
+                print('play_circle_outlined');
+              },
+            ),
           ),
-        ),
-        SizedBox(
-          width: 86, // Ajuste o valor conforme necessário
-          child: ElevatedButton(
-            child: Icon(Icons.fast_forward, size: 30, color: Colors.limeAccent.shade700,),
-            onPressed: () {
-              print('Icons.fast_forward');
-            },
+          SizedBox(
+            width: 86, // Ajuste o valor conforme necessário
+            child: ElevatedButton(
+              child: Icon(
+                Icons.fast_forward,
+                size: 30,
+                color: Colors.limeAccent.shade700,
+              ),
+              onPressed: () {
+                print('Icons.fast_forward');
+              },
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
-
+        ],
+      ),
+    );
+  }
 }
