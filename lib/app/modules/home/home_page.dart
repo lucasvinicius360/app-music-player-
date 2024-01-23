@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:music_player/app/models/music_model.dart';
 import 'home_store.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,6 +14,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends ModularState<HomePage, HomeStore> {
+  @override
+  void initState() {
+    super.initState();
+    store.findAll();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,38 +80,64 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                 ),
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: 10,
-                  itemBuilder: (_, int index) {
-                    return ListTile(
-                      onTap: () => Modular.to.pushNamed('/Player',
-                          arguments: 'assets/images/img2.jpg'),
-                      leading: Image.asset('assets/images/img2.jpg'),
-                      title: Text(
-                        'Live in Texas',
-                        style: GoogleFonts.orbitron(
-                          color: Colors.white,
-                          fontSize: 19,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      subtitle: Text(
-                        'Linkin Park',
-                        style: GoogleFonts.orbitron(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      contentPadding: EdgeInsets.all(15),
-                    );
+                child: FutureBuilder<List<MusicaModel>>(
+                  future: store.bandsFuture,
+                  builder: (context, data) {
+                    switch (data. connectionState) {
+                      case ConnectionState.waiting:
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+
+                      case ConnectionState.done:
+                        if (data.hasData) {
+                          return ListBuild(data.data);
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      default:
+                        return CircularProgressIndicator();
+                    }
                   },
+                  
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  ListView ListBuild(List<MusicaModel>? data) {
+    return ListView.builder(
+      itemCount: 10,
+      itemBuilder: (_, int index) {
+        return ListTile(
+          onTap: () => Modular.to
+              .pushNamed('/Player', arguments: 'assets/images/img2.jpg'),
+          leading: Image.asset('assets/images/img2.jpg'),
+          title: Text(
+            'Live in Texas',
+            style: GoogleFonts.orbitron(
+              color: Colors.white,
+              fontSize: 19,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          subtitle: Text(
+            'Linkin Park',
+            style: GoogleFonts.orbitron(
+              color: Colors.white,
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          contentPadding: EdgeInsets.all(15),
+        );
+      },
     );
   }
 }

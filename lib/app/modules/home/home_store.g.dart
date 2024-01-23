@@ -25,10 +25,35 @@ mixin _$HomeStore on HomeStoreBase, Store {
     });
   }
 
+  late final _$bandsFutureAtom =
+      Atom(name: 'HomeStoreBase.bandsFuture', context: context);
+
+  @override
+  ObservableFuture<List<MusicaModel>> get bandsFuture {
+    _$bandsFutureAtom.reportRead();
+    return super.bandsFuture;
+  }
+
+  @override
+  set bandsFuture(ObservableFuture<List<MusicaModel>> value) {
+    _$bandsFutureAtom.reportWrite(value, super.bandsFuture, () {
+      super.bandsFuture = value;
+    });
+  }
+
+  late final _$findAllAsyncAction =
+      AsyncAction('HomeStoreBase.findAll', context: context);
+
+  @override
+  Future<ObservableFuture<List<MusicaModel>>> findAll() {
+    return _$findAllAsyncAction.run(() => super.findAll());
+  }
+
   @override
   String toString() {
     return '''
-counter: ${counter}
+counter: ${counter},
+bandsFuture: ${bandsFuture}
     ''';
   }
 }

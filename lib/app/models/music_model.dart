@@ -4,21 +4,21 @@ part 'music_model.g.dart';
 
 @JsonSerializable()
 class MusicaModel {
-  @JsonKey(name: '_id')
+  @JsonKey(name: 'id')
   String id;
   String name_band;
-  String url_image;
-  String url_musica;
+  String link_image;
+  String link_music;
   String name_music;
-  String category;
+  String genero;
 
   MusicaModel({
     required this.id,
     required this.name_band,
-    required this.url_image,
-    required this.url_musica,
+    required this.link_image,
+    required this.link_music,
     required this.name_music,
-    required this.category,
+    required this.genero,
   });
 
   factory MusicaModel.fromJson(Map<String, dynamic> json) => _$MusicaModelFromJson(json);
