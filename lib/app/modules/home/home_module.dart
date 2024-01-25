@@ -18,7 +18,7 @@ class HomeModule extends Module {
   final List<ModularRoute> routes = [
     ChildRoute(Modular.initialRoute, child: (_, args) => HomeWelcome()),
     
-    ChildRoute('/Player', child: (_, args) => PlayerPage(url: args.data)),
+    ChildRoute('/Player', child: (_, args) => PlayerPage(music: args.data)),
     // Remova uma das rotas '/Player' para evitar duplicatas
   ];
 

@@ -7,9 +7,7 @@ part 'home_store.g.dart';
 class HomeStore = HomeStoreBase with _$HomeStore;
 
 abstract class HomeStoreBase with Store {
-
-   final BandRepository bandRepository;
-
+  final BandRepository bandRepository;
 
   @observable
   int counter = 0;
@@ -21,7 +19,8 @@ abstract class HomeStoreBase with Store {
   }
 
   @observable
-  late ObservableFuture<List<MusicaModel>> bandsFuture  = ObservableFuture.value([]);
+  late ObservableFuture<List<MusicaModel>> bandsFuture =
+      ObservableFuture.value([]);
 
   @action
   Future<ObservableFuture<List<MusicaModel>>> findAll() async {

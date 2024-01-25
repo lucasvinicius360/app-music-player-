@@ -33,6 +33,27 @@ class BandRepository {
     }
   }
 
+  Future<List<MusicaModel>> findById(String id) async {
+    var dio = Dio();
+    try {
+      var res = await dio.get('http://10.0.0.102:3000/api/getMusic/$id');
+      if (res.statusCode == 200) {
+        print(res.data.toString());
+        var list = (res.data as List).map((json) {
+          print(json);
+          return MusicaModel.fromJson(json);
+        }).toList();
+        return list;
+      } else {
+        print('Erro no servidor: ${res.statusCode}');
+        return [];
+      }
+    } catch (e) {
+      print('Erro na requisição: $e');
+      return [];
+    }
+  }
+
 
  
   

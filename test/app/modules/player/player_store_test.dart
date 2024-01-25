@@ -1,11 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:music_player/app/modules/player/player_store.dart';
+import 'package:music_player/app/repositories/band_reposytory.dart';
  
 void main() {
   late PlayerStore store;
 
   setUpAll(() {
-    store = PlayerStore();
+    var i;
+    store = PlayerStore(i.get<BandRepository>());
   });
 
   test('increment count', () async {

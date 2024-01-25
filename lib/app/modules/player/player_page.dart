@@ -1,11 +1,15 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:music_player/app/models/music_model.dart';
 import 'package:music_player/app/modules/player/player_store.dart';
 import 'package:flutter/material.dart';
 
 class PlayerPage extends StatefulWidget {
-  final String url;
-  PlayerPage({Key? key, required this.url}) : super(key: key);
+  
+
+  final MusicaModel music;
+
+  PlayerPage({Key? key, required this.music}) : super(key: key);
   @override
   PlayerPageState createState() => PlayerPageState();
 }
@@ -20,7 +24,7 @@ class PlayerPageState extends State<PlayerPage> {
         backgroundColor: Colors.black,
         centerTitle: true,
         title: Text(
-          widget.url,
+          widget.music.name_band,
           style: GoogleFonts.orbitron(
             color: Colors.white,
             fontSize: 17,
@@ -48,7 +52,7 @@ class PlayerPageState extends State<PlayerPage> {
         height: 350,
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage(widget.url), fit: BoxFit.cover),
+                image: NetworkImage(widget.music.link_image), fit: BoxFit.cover),
             borderRadius: BorderRadius.circular(2),
             boxShadow: [
               BoxShadow(color: Colors.grey.shade800, blurRadius: 10)

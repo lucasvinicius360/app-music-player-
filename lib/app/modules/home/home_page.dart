@@ -28,9 +28,16 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
         title: Text(
           'Music Play',
           style: GoogleFonts.orbitron(
-            color: Colors.white,
             // fontSize: 17,
             fontWeight: FontWeight.w500,
+            color: Color.fromARGB(255, 0, 244, 235),
+            shadows: [
+              Shadow(
+                offset: Offset(4.0, 3.0),
+                color: Color.fromARGB(255, 255, 69, 7),
+                blurRadius: 5.0,
+              ),
+            ],
           ),
         ),
         // backgroundColor: Colors.black,
@@ -83,7 +90,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                 child: FutureBuilder<List<MusicaModel>>(
                   future: store.bandsFuture,
                   builder: (context, data) {
-                    switch (data. connectionState) {
+                    switch (data.connectionState) {
                       case ConnectionState.waiting:
                         return Center(
                           child: CircularProgressIndicator(),
@@ -101,7 +108,6 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
                         return CircularProgressIndicator();
                     }
                   },
-                  
                 ),
               ),
             ],
@@ -113,14 +119,20 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
 
   ListView ListBuild(List<MusicaModel>? data) {
     return ListView.builder(
-      itemCount: 10,
+      itemCount: data?.length,
       itemBuilder: (_, int index) {
+        var band = data?[index];
         return ListTile(
           onTap: () => Modular.to
-              .pushNamed('/Player', arguments: 'assets/images/img2.jpg'),
-          leading: Image.asset('assets/images/img2.jpg'),
+              .pushNamed('/Player', arguments: band),
+          leading: Container(
+              width: 100,
+              child: Image.network(
+                '${band?.link_image}',
+                fit: BoxFit.contain,
+              )),
           title: Text(
-            'Live in Texas',
+            '${band?.name_music}',
             style: GoogleFonts.orbitron(
               color: Colors.white,
               fontSize: 19,
@@ -128,7 +140,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
             ),
           ),
           subtitle: Text(
-            'Linkin Park',
+            '${band?.name_band}',
             style: GoogleFonts.orbitron(
               color: Colors.white,
               fontSize: 15,
