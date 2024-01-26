@@ -338,10 +338,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_mobx
-      sha256: "0f0463db8a1582ac88670bea6e4f58ab64a16d701bc7d2c27ea50c1dbe5aecdc"
+      sha256: "4a5d062ff85ed3759f4aac6410ff0ffae32e324b2e71ca722ae1b37b32e865f4"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0+1"
+    version: "2.2.0+2"
   flutter_modular:
     dependency: "direct main"
     description:
@@ -540,10 +540,10 @@ packages:
     dependency: "direct main"
     description:
       name: mobx
-      sha256: "537bee828f30a971ffd7d29d8e22bbdec5c9f5899ad4b01f3206a21eeb5c75de"
+      sha256: "74ee54012dc7c1b3276eaa960a600a7418ef5f9997565deb8fca1fd88fb36b78"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.3"
+    version: "2.3.0+1"
   mobx_codegen:
     dependency: "direct dev"
     description:
@@ -945,10 +945,10 @@ packages:
     dependency: transitive
     description:
       name: uuid
-      sha256: "22c94e5ad1e75f9934b766b53c742572ee2677c56bc871d850a57dad0f82127f"
+      sha256: cd210a09f7c18cbe5a02511718e0334de6559871052c90a90c0cca46a4aa81c8
       url: "https://pub.dev"
     source: hosted
-    version: "4.2.2"
+    version: "4.3.3"
   vector_math:
     dependency: transitive
     description:

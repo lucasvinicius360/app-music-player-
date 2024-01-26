@@ -1,12 +1,12 @@
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:music_player/app/models/music_model.dart';
 import 'package:music_player/app/modules/player/player_store.dart';
 import 'package:flutter/material.dart';
+import 'package:music_player/app/repositories/band_reposytory.dart';
 
 class PlayerPage extends StatefulWidget {
-  
-
   final MusicaModel music;
 
   PlayerPage({Key? key, required this.music}) : super(key: key);
@@ -15,7 +15,14 @@ class PlayerPage extends StatefulWidget {
 }
 
 class PlayerPageState extends State<PlayerPage> {
-  // final PlayerStore store = Modular.get();
+  final PlayerStore playerStore = PlayerStore(BandRepository());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    playerStore.findMusic(widget.music.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +40,35 @@ class PlayerPageState extends State<PlayerPage> {
         ),
       ),
       backgroundColor: Colors.black,
-      body: Column(
-        children: <Widget>[
-          buildImageHeader(),
-          builNameMusic(),
-          buildProgressBar(),
-          buildButtons(),
-        ],
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.only(top: 50, bottom: 40),
+          // ignore: prefer_const_constructors
+          decoration: BoxDecoration(
+              color: Colors.black,
+              // ignore: prefer_const_constructors
+              image: DecorationImage(
+                  image: AssetImage("assets/images/hands.jpg"),
+                  fit: BoxFit.cover,
+                  opacity: 1.6)),
+          child: FutureBuilder(
+            builder: (context, snapshot) {
+              return Observer(
+                builder: (_) {
+                  return Column(
+                    children: <Widget>[
+                      buildImageHeader(),
+                      builNameMusic(),
+                      buildProgressBar(),
+                      buildButtons(),
+                    ],
+                  );
+                },
+              );
+            },
+            future: playerStore.bandsFuture,
+          ),
+        ),
       ),
     );
   }
@@ -52,7 +81,8 @@ class PlayerPageState extends State<PlayerPage> {
         height: 350,
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: NetworkImage(widget.music.link_image), fit: BoxFit.cover),
+                image: NetworkImage(widget.music.link_image),
+                fit: BoxFit.cover),
             borderRadius: BorderRadius.circular(2),
             boxShadow: [
               BoxShadow(color: Colors.grey.shade800, blurRadius: 10)
@@ -131,53 +161,74 @@ class PlayerPageState extends State<PlayerPage> {
   }
 
   buildButtons() {
-    return Container(
-      padding: EdgeInsets.all(20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment
-            .spaceEvenly, // Adicione esta linha para distribuir os botões igualmente no espaço disponível
-        children: <Widget>[
-          SizedBox(
-            width: 86, // Ajuste o valor conforme necessário
-            child: ElevatedButton(
-              child: Icon(
-                Icons.fast_rewind,
-                size: 30,
-                color: Colors.limeAccent.shade700,
-              ),
-              onPressed: () {
-                print('Icons.fast_rewind');
-              },
-            ),
+    return Observer(
+      builder: (_) {
+        return Container(
+          padding: EdgeInsets.all(20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment
+                .spaceEvenly, // Adicione esta linha para distribuir os botões igualmente no espaço disponível
+            children: <Widget>[
+              leftButton(),
+              playButton(),
+              rightButton(),
+            ],
           ),
-          SizedBox(
-            width: 86, // Ajuste o valor conforme necessário
-            child: ElevatedButton(
-              child: Icon(
-                Icons.play_circle_outlined,
-                size: 30,
-                color: Colors.limeAccent.shade700,
-              ),
-              onPressed: () {
-                print('play_circle_outlined');
-              },
-            ),
-          ),
-          SizedBox(
-            width: 86, // Ajuste o valor conforme necessário
-            child: ElevatedButton(
-              child: Icon(
-                Icons.fast_forward,
-                size: 30,
-                color: Colors.limeAccent.shade700,
-              ),
-              onPressed: () {
-                print('Icons.fast_forward');
-              },
-            ),
-          ),
-        ],
-      ),
+        );
+      }
     );
+  }
+
+  SizedBox rightButton() {
+    return SizedBox(
+          width: 86, // Ajuste o valor conforme necessário
+          child: ElevatedButton(
+            child: Icon(
+              Icons.fast_forward,
+              size: 30,
+              color: Colors.limeAccent.shade700,
+            ),
+            onPressed: () {
+              print('Icons.fast_forward');
+            },
+          ),
+        );
+  }
+
+  Observer playButton() {
+    return Observer(
+      builder: (_) {
+        return SizedBox(
+              width: 86, // Ajuste o valor conforme necessário
+              child: ElevatedButton(
+                child: Icon(
+                 playerStore.musicPlaying ? Icons.pause_circle_filled_sharp : Icons.play_circle_outlined ,
+                  size: 30,
+                  color: Colors.limeAccent.shade700,
+                ),
+                onPressed: () {
+                  print('play_circle_outlined');
+                  playerStore.playerMusic(widget.music);
+                },
+              ),
+            );
+      }
+    );
+  }
+
+  SizedBox leftButton() {
+    return SizedBox(
+          width: 86, // Ajuste o valor conforme necessário
+          child: ElevatedButton(
+            child: Icon(
+              Icons.fast_rewind,
+              size: 30,
+              color: Colors.limeAccent.shade700,
+            ),
+            onPressed: () {
+              print('Icons.fast_rewind');
+            },
+          ),
+        );
   }
 }

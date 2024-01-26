@@ -24,6 +24,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black,
         centerTitle: true,
         title: Text(
           'Music Play',
@@ -42,75 +43,86 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
         ),
         // backgroundColor: Colors.black,
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.only(top: 15),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 30,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                child: Text(
-                  "It's a Great Day for listen to music",
-                  style: GoogleFonts.orbitron(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500,
-                  ),
+      body: Container(
+        padding: EdgeInsets.only(top: 1, bottom: 40),
+        // ignore: prefer_const_constructors
+        decoration: BoxDecoration(
+            color: Colors.black,
+            // ignore: prefer_const_constructors
+            image: DecorationImage(
+                image: AssetImage("assets/images/hands.jpg"),
+                fit: BoxFit.cover,
+                opacity: 1.6)),
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(top: 15),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 30,
                 ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                width: MediaQuery.of(context).size.width,
-                height: 60,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "Find Your Band",
-                    hintStyle: GoogleFonts.orbitron(
-                      color: Colors.white,
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  child: Text(
+                    "It's a Great Day for listen to music",
+                    style: GoogleFonts.orbitron(
+                      color: const Color.fromARGB(255, 102, 102, 102),
                       fontSize: 17,
                       fontWeight: FontWeight.w500,
                     ),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      size: 30,
-                      color: Colors.white,
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                  width: MediaQuery.of(context).size.width,
+                  height: 60,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 95, 95, 95),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      hintText: "Find Your Band",
+                      hintStyle: GoogleFonts.orbitron(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        size: 30,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Expanded(
-                child: FutureBuilder<List<MusicaModel>>(
-                  future: store.bandsFuture,
-                  builder: (context, data) {
-                    switch (data.connectionState) {
-                      case ConnectionState.waiting:
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-
-                      case ConnectionState.done:
-                        if (data.hasData) {
-                          return ListBuild(data.data);
-                        } else {
+                Expanded(
+                  child: FutureBuilder<List<MusicaModel>>(
+                    future: store.bandsFuture,
+                    builder: (context, data) {
+                      switch (data.connectionState) {
+                        case ConnectionState.waiting:
                           return Center(
                             child: CircularProgressIndicator(),
                           );
-                        }
-                      default:
-                        return CircularProgressIndicator();
-                    }
-                  },
+
+                        case ConnectionState.done:
+                          if (data.hasData) {
+                            return ListBuild(data.data);
+                          } else {
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        default:
+                          return CircularProgressIndicator();
+                      }
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -123,8 +135,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
       itemBuilder: (_, int index) {
         var band = data?[index];
         return ListTile(
-          onTap: () => Modular.to
-              .pushNamed('/Player', arguments: band),
+          onTap: () => Modular.to.pushNamed('/Player', arguments: band),
           leading: Container(
               width: 100,
               child: Image.network(

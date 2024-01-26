@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:mobx/mobx.dart' show ActionController, AsyncAction, Atom, AtomSpyReporter, ObservableFuture, Store, action, observable;
 import 'package:music_player/app/models/music_model.dart';
 import 'package:music_player/app/repositories/band_reposytory.dart';
@@ -12,7 +13,7 @@ abstract class PlayerStoreBase with Store {
   int value = 0;
 
   // @observable
-  // MusicaModel banda = MusicaModel();
+  // MusicaModel banda;
 
   final BandRepository bandRepository;
   PlayerStoreBase(this.bandRepository) {
@@ -20,8 +21,9 @@ abstract class PlayerStoreBase with Store {
   }
 
 
-  @observable
-  late ObservableFuture<MusicaModel> music = ObservableFuture.value([] as MusicaModel);
+ @observable
+ late ObservableFuture<MusicaModel?> music = ObservableFuture.value(null);
+
 
   
   @action
@@ -29,16 +31,38 @@ abstract class PlayerStoreBase with Store {
     value++;
   }
 
+  @observable
+  late ObservableFuture<List<MusicaModel>> bandsFuture =
+      ObservableFuture.value([]);
+
   
   @action
-  Future<ObservableFuture<MusicaModel>> findMusic(String id) async {
-    music = ObservableFuture(bandRepository.findById(id) as Future<MusicaModel>);
-    print(music.value);
-    return music;
+  Future<ObservableFuture<List<MusicaModel>>> findMusic(String id) async {
+    bandsFuture = ObservableFuture(bandRepository.findById(id));
+    print('bandsFuture == > ${bandsFuture.toString()}');
+    return bandsFuture;
   }
 
   @observable
   int faixa = 0;
+
+  @observable
+  AudioPlayer audioPlayer = AudioPlayer();
+
+  @observable
+  bool musicPlaying = false;
+
+  Future<void> playerMusic(MusicaModel band) async {
+    if (music != null) {
+      if (!musicPlaying) {
+        await audioPlayer.play(UrlSource(band.link_music));
+        musicPlaying = true;
+      }else{
+        musicPlaying = false;
+        audioPlayer.pause();
+      }
+    }
+  }
 
   
 }

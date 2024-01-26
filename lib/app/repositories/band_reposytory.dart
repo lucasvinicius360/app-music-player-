@@ -17,7 +17,7 @@ class BandRepository {
     try {
       var res = await dio.get('http://10.0.0.102:3000/api/getMusic');
       if (res.statusCode == 200) {
-        print(res.data.toString());
+        // print(res.data.toString());
         var list = (res.data as List).map((json) {
           print(json);
           return MusicaModel.fromJson(json);
@@ -36,9 +36,9 @@ class BandRepository {
   Future<List<MusicaModel>> findById(String id) async {
     var dio = Dio();
     try {
-      var res = await dio.get('http://10.0.0.102:3000/api/getMusic/$id');
+      var res = await dio.get('http://10.0.0.102:3000/api/getMusicById/$id');
       if (res.statusCode == 200) {
-        print(res.data.toString());
+        // print(res.data.toString());
         var list = (res.data as List).map((json) {
           print(json);
           return MusicaModel.fromJson(json);

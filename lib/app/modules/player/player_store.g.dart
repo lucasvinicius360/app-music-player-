@@ -29,15 +29,31 @@ mixin _$PlayerStore on PlayerStoreBase, Store {
       Atom(name: 'PlayerStoreBase.music', context: context);
 
   @override
-  ObservableFuture<MusicaModel> get music {
+  ObservableFuture<MusicaModel?> get music {
     _$musicAtom.reportRead();
     return super.music;
   }
 
   @override
-  set music(ObservableFuture<MusicaModel> value) {
+  set music(ObservableFuture<MusicaModel?> value) {
     _$musicAtom.reportWrite(value, super.music, () {
       super.music = value;
+    });
+  }
+
+  late final _$bandsFutureAtom =
+      Atom(name: 'PlayerStoreBase.bandsFuture', context: context);
+
+  @override
+  ObservableFuture<List<MusicaModel>> get bandsFuture {
+    _$bandsFutureAtom.reportRead();
+    return super.bandsFuture;
+  }
+
+  @override
+  set bandsFuture(ObservableFuture<List<MusicaModel>> value) {
+    _$bandsFutureAtom.reportWrite(value, super.bandsFuture, () {
+      super.bandsFuture = value;
     });
   }
 
@@ -57,11 +73,43 @@ mixin _$PlayerStore on PlayerStoreBase, Store {
     });
   }
 
+  late final _$audioPlayerAtom =
+      Atom(name: 'PlayerStoreBase.audioPlayer', context: context);
+
+  @override
+  AudioPlayer get audioPlayer {
+    _$audioPlayerAtom.reportRead();
+    return super.audioPlayer;
+  }
+
+  @override
+  set audioPlayer(AudioPlayer value) {
+    _$audioPlayerAtom.reportWrite(value, super.audioPlayer, () {
+      super.audioPlayer = value;
+    });
+  }
+
+  late final _$musicPlayingAtom =
+      Atom(name: 'PlayerStoreBase.musicPlaying', context: context);
+
+  @override
+  bool get musicPlaying {
+    _$musicPlayingAtom.reportRead();
+    return super.musicPlaying;
+  }
+
+  @override
+  set musicPlaying(bool value) {
+    _$musicPlayingAtom.reportWrite(value, super.musicPlaying, () {
+      super.musicPlaying = value;
+    });
+  }
+
   late final _$findMusicAsyncAction =
       AsyncAction('PlayerStoreBase.findMusic', context: context);
 
   @override
-  Future<ObservableFuture<MusicaModel>> findMusic(String id) {
+  Future<ObservableFuture<List<MusicaModel>>> findMusic(String id) {
     return _$findMusicAsyncAction.run(() => super.findMusic(id));
   }
 
@@ -84,7 +132,10 @@ mixin _$PlayerStore on PlayerStoreBase, Store {
     return '''
 value: ${value},
 music: ${music},
-faixa: ${faixa}
+bandsFuture: ${bandsFuture},
+faixa: ${faixa},
+audioPlayer: ${audioPlayer},
+musicPlaying: ${musicPlaying}
     ''';
   }
 }

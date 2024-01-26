@@ -25,7 +25,7 @@ abstract class HomeStoreBase with Store {
   @action
   Future<ObservableFuture<List<MusicaModel>>> findAll() async {
     bandsFuture = ObservableFuture(bandRepository.findMusic());
-    print(bandsFuture.value);
+    // print(bandsFuture.value);
     return bandsFuture;
   }
 }
