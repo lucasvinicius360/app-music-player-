@@ -96,7 +96,7 @@ class PlayerPageState extends State<PlayerPage> {
       children: <Widget>[
         Container(
           child: Text(
-            'In The End',
+            '${widget.music.name_music}',
             style: GoogleFonts.orbitron(
               color: Colors.white,
               fontSize: 20,
@@ -106,7 +106,7 @@ class PlayerPageState extends State<PlayerPage> {
         ),
         Container(
           child: Text(
-            'Linkin Park',
+            '${widget.music.name_band}',
             style: GoogleFonts.orbitron(
               color: Colors.white,
               fontSize: 15,
