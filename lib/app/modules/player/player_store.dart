@@ -109,12 +109,7 @@ abstract class PlayerStoreBase with Store {
 
   @action 
   setTimeMusic(double value) {
-    // print('${value.toInt()} <== setTimeMusic (value)');
-    // Duration newPosition =
-    //     Duration(seconds: (value.toInt() * audioDuration.inSeconds));
-
-    // print('${newPosition} <== setTimeMusic');
-    // audioPlayer.seek(newPosition);
+    
 
     audioPlayer.seek(
         Duration(seconds: (value).toInt()));
