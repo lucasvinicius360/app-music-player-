@@ -9,6 +9,21 @@ part of 'player_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$PlayerStore on PlayerStoreBase, Store {
+  Computed<String>? _$timeProgressComputed;
+
+  @override
+  String get timeProgress =>
+      (_$timeProgressComputed ??= Computed<String>(() => super.timeProgress,
+              name: 'PlayerStoreBase.timeProgress'))
+          .value;
+  Computed<String>? _$totalTimeComputed;
+
+  @override
+  String get totalTime =>
+      (_$totalTimeComputed ??= Computed<String>(() => super.totalTime,
+              name: 'PlayerStoreBase.totalTime'))
+          .value;
+
   late final _$valueAtom =
       Atom(name: 'PlayerStoreBase.value', context: context);
 
@@ -38,6 +53,38 @@ mixin _$PlayerStore on PlayerStoreBase, Store {
   set music(ObservableFuture<MusicaModel?> value) {
     _$musicAtom.reportWrite(value, super.music, () {
       super.music = value;
+    });
+  }
+
+  late final _$audioDurationAtom =
+      Atom(name: 'PlayerStoreBase.audioDuration', context: context);
+
+  @override
+  Duration get audioDuration {
+    _$audioDurationAtom.reportRead();
+    return super.audioDuration;
+  }
+
+  @override
+  set audioDuration(Duration value) {
+    _$audioDurationAtom.reportWrite(value, super.audioDuration, () {
+      super.audioDuration = value;
+    });
+  }
+
+  late final _$timeToMusicAtom =
+      Atom(name: 'PlayerStoreBase.timeToMusic', context: context);
+
+  @override
+  Duration get timeToMusic {
+    _$timeToMusicAtom.reportRead();
+    return super.timeToMusic;
+  }
+
+  @override
+  set timeToMusic(Duration value) {
+    _$timeToMusicAtom.reportWrite(value, super.timeToMusic, () {
+      super.timeToMusic = value;
     });
   }
 
@@ -117,6 +164,17 @@ mixin _$PlayerStore on PlayerStoreBase, Store {
       ActionController(name: 'PlayerStoreBase', context: context);
 
   @override
+  dynamic changeTimeToMusic(Duration d) {
+    final _$actionInfo = _$PlayerStoreBaseActionController.startAction(
+        name: 'PlayerStoreBase.changeTimeToMusic');
+    try {
+      return super.changeTimeToMusic(d);
+    } finally {
+      _$PlayerStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void increment() {
     final _$actionInfo = _$PlayerStoreBaseActionController.startAction(
         name: 'PlayerStoreBase.increment');
@@ -132,10 +190,14 @@ mixin _$PlayerStore on PlayerStoreBase, Store {
     return '''
 value: ${value},
 music: ${music},
+audioDuration: ${audioDuration},
+timeToMusic: ${timeToMusic},
 bandsFuture: ${bandsFuture},
 faixa: ${faixa},
 audioPlayer: ${audioPlayer},
-musicPlaying: ${musicPlaying}
+musicPlaying: ${musicPlaying},
+timeProgress: ${timeProgress},
+totalTime: ${totalTime}
     ''';
   }
 }

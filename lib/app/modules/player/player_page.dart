@@ -22,6 +22,7 @@ class PlayerPageState extends State<PlayerPage> {
     // TODO: implement initState
     super.initState();
     playerStore.findMusic(widget.music.id);
+    playerStore.audioPlayer.onPositionChanged.listen((event) => playerStore.changeTimeToMusic(event));
   }
 
   @override
@@ -33,7 +34,14 @@ class PlayerPageState extends State<PlayerPage> {
         title: Text(
           widget.music.name_band,
           style: GoogleFonts.orbitron(
-            color: Colors.white,
+            color: Color.fromARGB(255, 0, 244, 235),
+            shadows: [
+              Shadow(
+                offset: Offset(4.0, 3.0),
+                color: Color.fromARGB(255, 255, 69, 7),
+                blurRadius: 5.0,
+              ),
+            ],
             fontSize: 17,
             fontWeight: FontWeight.w500,
           ),
@@ -119,116 +127,154 @@ class PlayerPageState extends State<PlayerPage> {
   }
 
   buildProgressBar() {
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.only(left: 35, right: 35, top: 30),
-          child: LinearProgressIndicator(
-            backgroundColor: Colors.grey.shade500,
-            valueColor:
-                AlwaysStoppedAnimation<Color>(Colors.limeAccent.shade700),
-            value: 0.5,
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 35, right: 35, top: 6),
-          child: Row(
-            children: <Widget>[
-              Text(
-                '0:15',
-                style: GoogleFonts.orbitron(
-                  color: Colors.white,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w500,
-                ),
+    return Observer(
+      builder: (_) {
+        return Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(left: 35, right: 35, top: 30),
+              child: LinearProgressIndicator(
+                backgroundColor: Colors.grey.shade500,
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(Colors.limeAccent.shade700),
+                value: 0.5,
               ),
-              Expanded(
-                child: Container(),
-              ),
-              Text(
-                '03:15',
-                style: GoogleFonts.orbitron(
-                  color: Colors.white,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w500,
-                ),
-              )
-            ],
-          ),
-        )
-      ],
+            ),
+            times()
+          ],
+        );
+      }
     );
   }
 
-  buildButtons() {
+  Observer times() {
     return Observer(
       builder: (_) {
         return Container(
-          padding: EdgeInsets.all(20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment
-                .spaceEvenly, // Adicione esta linha para distribuir os botões igualmente no espaço disponível
-            children: <Widget>[
-              leftButton(),
-              playButton(),
-              rightButton(),
+            padding: EdgeInsets.only(left: 35, right: 35, top: 6),
+            child: Row(
+              children: <Widget>[
+                begingTime(),
+                Expanded(
+                  child: Container(),
+                ),
+                finishTime()
+              ],
+            ),
+          );
+      }
+    );
+  }
+
+  Observer begingTime() {
+    return Observer(
+      builder: (_) {
+        return Text(
+          '${playerStore.timeProgress}',
+          style: GoogleFonts.orbitron(
+            color: Color.fromARGB(255, 0, 244, 235),
+            shadows: [
+              Shadow(
+                offset: Offset(4.0, 3.0),
+                color: Color.fromARGB(255, 255, 69, 7),
+                blurRadius: 5.0,
+              ),
             ],
+            fontSize: 17,
+            fontWeight: FontWeight.w500,
           ),
         );
       }
     );
+  }
+
+  Observer finishTime() {
+    return Observer(builder: (_) {
+      return Text(
+        playerStore.totalTime,
+        style: GoogleFonts.orbitron(
+          color: Color.fromARGB(255, 0, 244, 235),
+            shadows: [
+              Shadow(
+                offset: Offset(4.0, 3.0),
+                color: Color.fromARGB(255, 255, 69, 7),
+                blurRadius: 5.0,
+              ),
+            ],
+          fontSize: 17,
+          fontWeight: FontWeight.w500,
+        ),
+      );
+    });
+  }
+
+  buildButtons() {
+    return Observer(builder: (_) {
+      return Container(
+        padding: EdgeInsets.all(20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment
+              .spaceEvenly, // Adicione esta linha para distribuir os botões igualmente no espaço disponível
+          children: <Widget>[
+            leftButton(),
+            playButton(),
+            rightButton(),
+          ],
+        ),
+      );
+    });
   }
 
   SizedBox rightButton() {
     return SizedBox(
-          width: 86, // Ajuste o valor conforme necessário
-          child: ElevatedButton(
-            child: Icon(
-              Icons.fast_forward,
-              size: 30,
-              color: Colors.limeAccent.shade700,
-            ),
-            onPressed: () {
-              print('Icons.fast_forward');
-            },
-          ),
-        );
+      width: 86, // Ajuste o valor conforme necessário
+      child: ElevatedButton(
+        child: Icon(
+          Icons.fast_forward,
+          size: 30,
+          color: Colors.limeAccent.shade700,
+        ),
+        onPressed: () {
+          print('Icons.fast_forward');
+        },
+      ),
+    );
   }
 
   Observer playButton() {
-    return Observer(
-      builder: (_) {
-        return SizedBox(
-              width: 86, // Ajuste o valor conforme necessário
-              child: ElevatedButton(
-                child: Icon(
-                 playerStore.musicPlaying ? Icons.pause_circle_filled_sharp : Icons.play_circle_outlined ,
-                  size: 30,
-                  color: Colors.limeAccent.shade700,
-                ),
-                onPressed: () {
-                  print('play_circle_outlined');
-                  playerStore.playerMusic(widget.music);
-                },
-              ),
-            );
-      }
-    );
+    return Observer(builder: (_) {
+      return SizedBox(
+        width: 86, // Ajuste o valor conforme necessário
+        child: ElevatedButton(
+          child: Icon(
+            playerStore.musicPlaying
+                ? Icons.pause_circle_filled_sharp
+                : Icons.play_circle_outlined,
+            size: 30,
+            color: Colors.limeAccent.shade700,
+          ),
+          onPressed: () {
+            print('play_circle_outlined');
+            playerStore.playerMusic(widget.music);
+          },
+        ),
+      );
+    });
   }
 
   SizedBox leftButton() {
     return SizedBox(
-          width: 86, // Ajuste o valor conforme necessário
-          child: ElevatedButton(
-            child: Icon(
-              Icons.fast_rewind,
-              size: 30,
-              color: Colors.limeAccent.shade700,
-            ),
-            onPressed: () {
-              print('Icons.fast_rewind');
-            },
-          ),
-        );
+      width: 86, // Ajuste o valor conforme necessário
+      child: ElevatedButton(
+        child: Icon(
+          Icons.fast_rewind,
+          size: 30,
+          color: Colors.limeAccent.shade700,
+        ),
+        onPressed: () {
+          print('Icons.fast_rewind');
+        },
+      ),
+    );
   }
 }
