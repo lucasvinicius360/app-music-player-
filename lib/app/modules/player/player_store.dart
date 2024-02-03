@@ -45,7 +45,7 @@ abstract class PlayerStoreBase with Store {
 
   @action
   changeTimeToMusic(Duration d) {
-    print(d);
+    // print(d);
     timeToMusic = d;
   }
 
@@ -61,7 +61,7 @@ abstract class PlayerStoreBase with Store {
   @action
   Future<ObservableFuture<List<MusicaModel>>> findMusic(String id) async {
     bandsFuture = ObservableFuture(bandRepository.findById(id));
-    print('bandsFuture == > ${bandsFuture.toString()}');
+    // print('bandsFuture == > ${bandsFuture.toString()}');
     return bandsFuture;
   }
 
@@ -76,21 +76,28 @@ abstract class PlayerStoreBase with Store {
 
   @computed
   String get totalTime => audioDuration != null
-      ? '0${audioDuration.inMinutes.remainder(60)}:${audioDuration.inSeconds.remainder(60)}'
+      ? '0${audioDuration.inMinutes.remainder(60)}:${audioDuration.inSeconds.remainder(60) < 10 ? '0${audioDuration.inSeconds.remainder(60)}' : audioDuration.inSeconds.remainder(60)}'
       : "00:00";
+
+  @computed
+  double get progressDuration => audioDuration != null
+      ? (audioDuration.inSeconds > 0
+          ? timeToMusic.inSeconds.toDouble() * 100 / audioDuration.inSeconds
+          : 0)
+      : 0;
 
   Future<void> playerMusic(MusicaModel band) async {
     if (music != null) {
       if (!musicPlaying) {
+        audioPlayer.pause();
+
         await audioPlayer.play(UrlSource(band.link_music));
 
         await Future.delayed(Duration(milliseconds: 200));
 
         Duration? duration = await audioPlayer.getDuration();
         if (audioDuration != null) {
-          print('${duration}  <== duration');
           this.audioDuration = duration!;
-          print('${audioDuration}  <== audioDuration');
         }
         musicPlaying = true;
       } else {
@@ -98,5 +105,20 @@ abstract class PlayerStoreBase with Store {
         audioPlayer.pause();
       }
     }
+  }
+
+  @action 
+  setTimeMusic(double value) {
+    // print('${value.toInt()} <== setTimeMusic (value)');
+    // Duration newPosition =
+    //     Duration(seconds: (value.toInt() * audioDuration.inSeconds));
+
+    // print('${newPosition} <== setTimeMusic');
+    // audioPlayer.seek(newPosition);
+
+    audioPlayer.seek(
+        Duration(seconds: (value).toInt()));
+
+
   }
 }

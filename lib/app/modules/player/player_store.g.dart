@@ -23,6 +23,13 @@ mixin _$PlayerStore on PlayerStoreBase, Store {
       (_$totalTimeComputed ??= Computed<String>(() => super.totalTime,
               name: 'PlayerStoreBase.totalTime'))
           .value;
+  Computed<double>? _$progressDurationComputed;
+
+  @override
+  double get progressDuration => (_$progressDurationComputed ??=
+          Computed<double>(() => super.progressDuration,
+              name: 'PlayerStoreBase.progressDuration'))
+      .value;
 
   late final _$valueAtom =
       Atom(name: 'PlayerStoreBase.value', context: context);
@@ -186,6 +193,17 @@ mixin _$PlayerStore on PlayerStoreBase, Store {
   }
 
   @override
+  dynamic setTimeMusic(double value) {
+    final _$actionInfo = _$PlayerStoreBaseActionController.startAction(
+        name: 'PlayerStoreBase.setTimeMusic');
+    try {
+      return super.setTimeMusic(value);
+    } finally {
+      _$PlayerStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 value: ${value},
@@ -197,7 +215,8 @@ faixa: ${faixa},
 audioPlayer: ${audioPlayer},
 musicPlaying: ${musicPlaying},
 timeProgress: ${timeProgress},
-totalTime: ${totalTime}
+totalTime: ${totalTime},
+progressDuration: ${progressDuration}
     ''';
   }
 }

@@ -193,6 +193,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
+  circular_seek_bar:
+    dependency: "direct main"
+    description:
+      name: circular_seek_bar
+      sha256: "567ef808513a398045cfb5b4767838270440ef4da07310ca75bf0c89ec678aba"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.1"
   clock:
     dependency: transitive
     description:
@@ -366,6 +374,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  flutter_seekbar:
+    dependency: "direct main"
+    description:
+      name: flutter_seekbar
+      sha256: b4fc58e2464875e50d7387d77f5374b0a774c5912dc8cd28ce15f0d7c19cda83
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -837,6 +853,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
+  squiggly_slider:
+    dependency: "direct main"
+    description:
+      name: squiggly_slider
+      sha256: "8fbcc3c165284051976d7c0b4e160876cffe67733fbf09f1c8d92b751e843e77"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.3"
   stack_trace:
     dependency: transitive
     description:
@@ -1022,5 +1046,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.2.2 <4.0.0"
+  dart: ">=3.2.2 <3.20.0"
   flutter: ">=3.10.0"

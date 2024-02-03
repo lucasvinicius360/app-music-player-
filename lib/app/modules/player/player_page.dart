@@ -22,7 +22,10 @@ class PlayerPageState extends State<PlayerPage> {
     // TODO: implement initState
     super.initState();
     playerStore.findMusic(widget.music.id);
-    playerStore.audioPlayer.onPositionChanged.listen((event) => playerStore.changeTimeToMusic(event));
+    playerStore.audioPlayer.onPositionChanged
+        .listen((event) => playerStore.changeTimeToMusic(event));
+
+    print('${playerStore.progressDuration.toDouble()}  <== progressDuration');
   }
 
   @override
@@ -42,7 +45,7 @@ class PlayerPageState extends State<PlayerPage> {
                 blurRadius: 5.0,
               ),
             ],
-            fontSize: 17,
+            fontSize: 27,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -88,15 +91,26 @@ class PlayerPageState extends State<PlayerPage> {
         width: MediaQuery.of(this.context).size.width,
         height: 350,
         decoration: BoxDecoration(
-            image: DecorationImage(
-                image: NetworkImage(widget.music.link_image),
-                fit: BoxFit.cover),
-            borderRadius: BorderRadius.circular(2),
-            boxShadow: [
-              BoxShadow(color: Colors.grey.shade800, blurRadius: 10)
-            ]),
+          image: DecorationImage(
+            image: widget.music.link_image != null
+                ? _buildImageProvider(widget.music.link_image)
+                : AssetImage("assets/images/hands.jpg"),
+            fit: BoxFit.cover,
+          ),
+          borderRadius: BorderRadius.circular(2),
+          boxShadow: [BoxShadow(color: Colors.grey.shade800, blurRadius: 10)],
+        ),
       ),
     );
+  }
+
+  ImageProvider<Object> _buildImageProvider(dynamic link) {
+    if (link is String) {
+      return NetworkImage(link);
+    } else {
+      // Trate outros casos conforme necessário (pode lançar uma exceção, retornar outra imagem padrão, etc.)
+      return AssetImage("assets/images/default.jpg");
+    }
   }
 
   builNameMusic() {
@@ -126,66 +140,67 @@ class PlayerPageState extends State<PlayerPage> {
     );
   }
 
-  buildProgressBar() {
-    return Observer(
-      builder: (_) {
-        return Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(left: 35, right: 35, top: 30),
-              child: LinearProgressIndicator(
-                backgroundColor: Colors.grey.shade500,
-                valueColor:
-                    AlwaysStoppedAnimation<Color>(Colors.limeAccent.shade700),
-                value: 0.5,
-              ),
+  Observer buildProgressBar() {
+    return Observer(builder: (_) {
+      return Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(left: 35, right: 35, top: 30),
+            child: Slider(
+              value: playerStore.progressDuration.toDouble(),
+              max: 100.0,
+              activeColor: Color.fromARGB(255, 0, 244, 235),
+              inactiveColor: Color.fromARGB(255, 255, 69, 7),
+              label: '${playerStore.progressDuration}',
+              onChanged: (double value) {
+                // print(playerStore.progressDuration);
+                print("Slider value changed: $value");
+                playerStore.setTimeMusic(value);
+                // playerStore.setTimeMusic(playerStore.progressDuration);
+              },
             ),
-            times()
-          ],
-        );
-      }
-    );
+          ),
+          times()
+        ],
+      );
+    });
   }
 
   Observer times() {
-    return Observer(
-      builder: (_) {
-        return Container(
-            padding: EdgeInsets.only(left: 35, right: 35, top: 6),
-            child: Row(
-              children: <Widget>[
-                begingTime(),
-                Expanded(
-                  child: Container(),
-                ),
-                finishTime()
-              ],
+    return Observer(builder: (_) {
+      return Container(
+        padding: EdgeInsets.only(left: 35, right: 35, top: 6),
+        child: Row(
+          children: <Widget>[
+            begingTime(),
+            Expanded(
+              child: Container(),
             ),
-          );
-      }
-    );
+            finishTime()
+          ],
+        ),
+      );
+    });
   }
 
   Observer begingTime() {
-    return Observer(
-      builder: (_) {
-        return Text(
-          '${playerStore.timeProgress}',
-          style: GoogleFonts.orbitron(
-            color: Color.fromARGB(255, 0, 244, 235),
-            shadows: [
-              Shadow(
-                offset: Offset(4.0, 3.0),
-                color: Color.fromARGB(255, 255, 69, 7),
-                blurRadius: 5.0,
-              ),
-            ],
-            fontSize: 17,
-            fontWeight: FontWeight.w500,
-          ),
-        );
-      }
-    );
+    return Observer(builder: (_) {
+      return Text(
+        '${playerStore.timeProgress}',
+        style: GoogleFonts.orbitron(
+          color: Color.fromARGB(255, 0, 244, 235),
+          shadows: [
+            Shadow(
+              offset: Offset(4.0, 3.0),
+              color: Color.fromARGB(255, 255, 69, 7),
+              blurRadius: 5.0,
+            ),
+          ],
+          fontSize: 23,
+          fontWeight: FontWeight.w500,
+        ),
+      );
+    });
   }
 
   Observer finishTime() {
@@ -194,14 +209,14 @@ class PlayerPageState extends State<PlayerPage> {
         playerStore.totalTime,
         style: GoogleFonts.orbitron(
           color: Color.fromARGB(255, 0, 244, 235),
-            shadows: [
-              Shadow(
-                offset: Offset(4.0, 3.0),
-                color: Color.fromARGB(255, 255, 69, 7),
-                blurRadius: 5.0,
-              ),
-            ],
-          fontSize: 17,
+          shadows: [
+            Shadow(
+              offset: Offset(4.0, 3.0),
+              color: Color.fromARGB(255, 255, 69, 7),
+              blurRadius: 5.0,
+            ),
+          ],
+          fontSize: 23,
           fontWeight: FontWeight.w500,
         ),
       );
@@ -229,10 +244,14 @@ class PlayerPageState extends State<PlayerPage> {
     return SizedBox(
       width: 86, // Ajuste o valor conforme necessário
       child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color.fromARGB(
+              255, 0, 244, 235), // Defina a cor de fundo desejada aqui
+        ),
         child: Icon(
           Icons.fast_forward,
           size: 30,
-          color: Colors.limeAccent.shade700,
+          color: Color.fromARGB(255, 255, 69, 7),
         ),
         onPressed: () {
           print('Icons.fast_forward');
@@ -246,12 +265,16 @@ class PlayerPageState extends State<PlayerPage> {
       return SizedBox(
         width: 86, // Ajuste o valor conforme necessário
         child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color.fromARGB(
+                255, 0, 244, 235), // Defina a cor de fundo desejada aqui
+          ),
           child: Icon(
             playerStore.musicPlaying
                 ? Icons.pause_circle_filled_sharp
                 : Icons.play_circle_outlined,
             size: 30,
-            color: Colors.limeAccent.shade700,
+            color: Color.fromARGB(255, 255, 69, 7),
           ),
           onPressed: () {
             print('play_circle_outlined');
@@ -266,10 +289,14 @@ class PlayerPageState extends State<PlayerPage> {
     return SizedBox(
       width: 86, // Ajuste o valor conforme necessário
       child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color.fromARGB(
+              255, 0, 244, 235), // Defina a cor de fundo desejada aqui
+        ),
         child: Icon(
           Icons.fast_rewind,
-          size: 30,
-          color: Colors.limeAccent.shade700,
+          size: 35,
+          color: Color.fromARGB(255, 255, 69, 7),
         ),
         onPressed: () {
           print('Icons.fast_rewind');

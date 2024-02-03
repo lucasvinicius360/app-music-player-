@@ -44,6 +44,9 @@ dependencies:
   flutter_mobx: ^2.2.0+2
   mobx: ^2.3.0+1
   audioplayers: ^5.2.1
+  squiggly_slider: ^1.0.3
+  flutter_seekbar: ^1.0.1
+  circular_seek_bar: ^1.1.1
   
 
 dev_dependencies:
